@@ -265,6 +265,8 @@ const en: LocaleType = {
         return `${overview.chat} chats，${overview.message} messages，${overview.prompt} prompts，${overview.mask} masks`;
       },
       ImportFailed: "Failed to import from file",
+      Keyval: "app.nextchat.dev Data",
+      KeyvalDescription: "The keyval-store json data exported using the Tampermonkey script can be imported through this item"
     },
     Mask: {
       Splash: {
