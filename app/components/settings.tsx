@@ -573,6 +573,25 @@ function SyncItems() {
         </ListItem>
       </List>
 
+        <ListItem
+          title={Locale.Settings.Sync.Keyval}
+          subTitle={Locale.Settings.Sync.KeyvalDescription}
+        >
+          <div style={{ display: "flex" }}>
+            <input id="fileinput" type="file" accept=".json" style={{ display: "none" }} onChange={handleFileSelect}></input>
+            <IconButton
+              aria={Locale.Settings.Sync.Keyval + Locale.Export.Steps.Select}
+              icon={<UploadIcon />}
+              text={Locale.Export.Steps.Select + "&" + Locale.UI.Import}
+              onClick={() => {
+                const fileinput = document.getElementById("fileinput")
+                fileinput?.click()
+              }}
+            />
+          </div>
+        </ListItem>
+      </List>
+
       {showSyncConfigModal && (
         <SyncConfigModal onClose={() => setShowSyncConfigModal(false)} />
       )}
@@ -580,6 +599,54 @@ function SyncItems() {
   );
 }
 
+function openDatabase() {
+  return new Promise((resolve, reject) => {
+    const request = indexedDB.open('keyval-store');
+    request.onerror = (event: any) => alert(event.target.error);
+    request.onsuccess = (event: any) => resolve(event.target.result);
+    request.onupgradeneeded = (event: any) => {
+      const db = event.target.result;
+      if (!db.objectStoreNames.contains('keyval')) {
+        db.createObjectStore('keyval');
+      }
+      resolve(db);
+    };
+  });
+}
+
+function handleFileSelect(event: any) {
+  const file = event.target.files[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.readAsText(file);
+    reader.onload = async (e: any) => {
+      try {
+        const jsonData = JSON.parse(e.target.result);
+        const db = await openDatabase();
+        await importDataToDb(db, jsonData);
+        alert(Locale.UI.Import + Locale.Sd.Status.Success + '!');
+        location.reload();
+      } catch (error) {
+        console.error(Locale.UI.Import + Locale.Sd.Status.Error, error);
+        alert(Locale.UI.Import + Locale.Sd.Status.Error + '!');
+      }
+    };
+  }
+}
+
+async function importDataToDb(db: any, data: any) {
+  const transaction = db.transaction(['keyval'], 'readwrite');
+  const objectStore = transaction.objectStore('keyval');
+
+  for (const item of data) {
+    objectStore.put(item.value, item.key);
+  }
+
+  return new Promise((resolve, reject) => {
+    transaction.oncomplete = () => resolve(null);
+    transaction.onerror = (event: any) => reject(event.target.error);
+  });
+}
 export function Settings() {
   const navigate = useNavigate();
   const [showEmojiPicker, setShowEmojiPicker] = useState(false);
