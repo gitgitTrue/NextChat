@@ -4,7 +4,7 @@
 
 预览图，如果觉得app内不好用，可以打开浏览器访问 localhost:8080，把App作为后台服务使用
 
-<img src="https://github.com/gitgitTrue/NextChatTempAPP/0.jpg" width="210px">
+<img src="https://github.com/gitgitTrue/NextChatTempAPP/blob/main/0.jpg" width="210px">
 
 apk打包使用flutter + flutter_inappwebview
 
