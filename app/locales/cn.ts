@@ -262,6 +262,8 @@ const cn = {
         return `${overview.chat} 次对话，${overview.message} 条消息，${overview.prompt} 条提示词，${overview.mask} 个面具`;
       },
       ImportFailed: "导入失败",
+      Keyval: "app.nextchat.dev 数据",
+      KeyvalDescription: "使用油猴脚本导出的keyval-store json数据，可通过此项导入"
     },
     Mask: {
       Splash: {
