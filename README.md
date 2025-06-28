@@ -2,7 +2,7 @@
 
 本项目应该不会继续更新
 
-[预览图](./0.jpg)
+![预览图](./0.jpg)
 
 apk打包使用flutter + flutter_inappwebview
 
